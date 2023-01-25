@@ -29,18 +29,34 @@ typedef struct				s_fdf_data
 	void					*win;
 	struct s_img_data		*img1;
 	struct s_img_data		*img2;
+	struct s_camera			*camera;
 	int						**map;
 	int						map_size[2];
+	//add translate vector for 'placing' the map in the image,
+	// check if it is  ' out of bounds and scale it to fit based on that instad of height and width
 	int						grid_height;
 	int						grid_width;
 }							t_fdf_data;
 //add starting coord to the struct?
 
-typedef struct	s_coords
+typedef struct	s_vector3
 {
 	int	x;
 	int	y;
-}				t_coords;
+	int z;
+}				t_vector3;
+
+typedef struct			s_camera
+{
+	struct s_vector3	***camera_view; //malloc for 2d array of vectors, does it need to be array? maybe...
+	/* may need following data 
+	rotation x
+	rotation y
+	origional points
+	transformed points for projection
+	*/
+}						t_camera;
+
 //not sure if I need this....
 // typedef struct	s_map_data
 // {

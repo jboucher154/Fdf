@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 16:54:03 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/17 15:51:57 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/01/25 17:52:02 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include "ft_printf.h"
 //begin custom mlx functions
-void	my_mlx_pixel_put(t_img_data *data, t_coords *start, int color)
+void	my_mlx_pixel_put(t_img_data *data, t_vector3 *start, int color)
 {
 	char	*dst;
 
@@ -26,10 +26,11 @@ void	my_mlx_pixel_put(t_img_data *data, t_coords *start, int color)
 //end custom mlx functions
 
 //begin bresneham
-void	set_temps(t_coords *one, t_coords *two, t_coords *first, t_coords *second)
+/*need to add special cases for slopes > 1 and < -1 */
+void	set_temps(t_vector3 *one, t_vector3 *two, t_vector3 *first, t_vector3 *second)
 {
-	// one = (t_coords *) ft_calloc(1, sizeof(t_coords));
-	// two = (t_coords *) ft_calloc(1, sizeof(t_coords));
+	// one = (t_vector3 *) ft_calloc(1, sizeof(t_vector3));
+	// two = (t_vector3 *) ft_calloc(1, sizeof(t_vector3));
 	// if (one && two)
 	// {
 		one->x = first->x;
@@ -38,11 +39,11 @@ void	set_temps(t_coords *one, t_coords *two, t_coords *first, t_coords *second)
 		two->y = second->y;
 	// }
 }
-void	bresneham_line_pos(t_coords *first, t_coords *second, int color, t_fdf_data *fdf)
+void	bresneham_pos_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
 {
-	t_coords	deltas;
-	t_coords	one;
-	t_coords	two;
+	t_vector3	deltas;
+	t_vector3	one;
+	t_vector3	two;
 	int			decision;
 
 	set_temps(&one, &two, first, second);
@@ -72,12 +73,40 @@ void	bresneham_line_pos(t_coords *first, t_coords *second, int color, t_fdf_data
 	}
 }
 
-void	bresneham_line_neg(t_coords *first, t_coords *second, int color, t_fdf_data *fdf)
+void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
 {
-	t_coords	deltas;
+	t_vector3	deltas;
+	t_vector3	one;
+	t_vector3	two;
 	int			decision;
-	t_coords	one;
-	t_coords	two;
+
+	set_temps(&one, &two, first, second);
+	deltas.x = two.x - one.x;
+	deltas.y = two.y - one.y;
+	decision = 2 * deltas.x - deltas.y;
+	while (one.y < two.y)
+	{
+		my_mlx_pixel_put(fdf->img1, &one, color);
+		// ft_printf("bresneham pixel printed\n");
+		if (decision >= 0)
+		{
+			one.x += 1;
+			decision = decision + 2 * deltas.x - 2 * deltas.y;
+		}
+		else
+		{
+			decision = decision + 2 * deltas.y;
+		}
+		one.y += 1;
+	}
+}
+
+void	bresneham_neg_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
+{
+	t_vector3	deltas;
+	int			decision;
+	t_vector3	one;
+	t_vector3	two;
 
 	set_temps(&one, &two, first, second);
 	deltas.x = two.x - one.x;
@@ -98,6 +127,33 @@ void	bresneham_line_neg(t_coords *first, t_coords *second, int color, t_fdf_data
 		one.x += 1;
 	}
 }
+
+void	bresneham_neg_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
+{
+	t_vector3	deltas;
+	int			decision;
+	t_vector3	one;
+	t_vector3	two;
+
+	set_temps(&one, &two, first, second);
+	deltas.x = two.x - one.x;
+	deltas.y = two.y - one.y;
+	decision = 2 * deltas.x + deltas.y;
+	while (one.y < two.y)
+	{
+		my_mlx_pixel_put(fdf->img1, &one, color);
+		if (decision >= 0)
+		{
+			one.x -= 1;
+			decision = decision - 2 * deltas.x + 2 * deltas.y;
+		}
+		else
+		{
+			decision = decision - 2 * deltas.x;
+		}
+		one.y += 1;
+	}
+}
 //end bresneham
 
 //hook handling and exiting
@@ -114,7 +170,7 @@ void	free_int_2darr(int **to_free)
 	free(to_free);
 }
 
-int	mlx_close(t_fdf_data *fdf)
+int	mlx_close(t_fdf_data *fdf) //add string and number to this for error message and exit code
 {
 	if (fdf->img1)
 	{
@@ -128,6 +184,7 @@ int	mlx_close(t_fdf_data *fdf)
 	}
 	if (fdf->map)
 		free_int_2darr(fdf->map);
+	//free camera and contents
 	mlx_destroy_window(fdf->mlx, fdf->win);
 	free(fdf->mlx);
 	free(fdf);
@@ -146,8 +203,8 @@ int	handle_press(int key_code, t_fdf_data *fdf)
 }
 //end hook handling
 
-//begin grid printing
-void	first_point(t_fdf_data *fdf, t_coords *first) //t_fdf_data *fdf, include as param for more complex deterination of first point llocation
+//begin grid printing --->may not need any of this section anymore...
+void	first_point(t_fdf_data *fdf, t_vector3 *first) //t_fdf_data *fdf, include as param for more complex deterination of first point llocation
 {
 	double	tri_height;
 	double	hypo;
@@ -160,9 +217,9 @@ void	first_point(t_fdf_data *fdf, t_coords *first) //t_fdf_data *fdf, include as
 	// ft_printf("first y: %i\n", first->y);
 }
 
-void	next_point_right(t_fdf_data *fdf, t_coords *first, int map_value)
+void	next_point_right(t_fdf_data *fdf, t_vector3 *first, int map_value)
 {
-	t_coords	next;
+	t_vector3	next;
 
 	next.x = first->x + fdf->grid_height / 2;
 	if (map_value == 0)
@@ -171,12 +228,12 @@ void	next_point_right(t_fdf_data *fdf, t_coords *first, int map_value)
 		next.y = (first->y + fdf->grid_width / 2) - fdf->grid_height / map_value;
 	// ft_printf("next right x: %i\n", next.x);
 	// ft_printf("next right y: %i\n", next.y);
-	bresneham_line_pos(first, &next, 0x00FFFF, fdf);
+	bresneham_pos_grad(first, &next, 0x00FFFF, fdf);
 }
 
-void	next_point_left(t_fdf_data *fdf, t_coords *first, int map_value)
+void	next_point_left(t_fdf_data *fdf, t_vector3 *first, int map_value)
 {
-	t_coords	next;
+	t_vector3	next;
 
 	next.x = first->x - fdf->grid_height / 2;
 	if (map_value == 0)
@@ -185,34 +242,144 @@ void	next_point_left(t_fdf_data *fdf, t_coords *first, int map_value)
 		next.y = (first->y + fdf->grid_width / 2) - fdf->grid_height / map_value;
 	// ft_printf("next left x: %i\n", next.x);
 	// ft_printf("next left y: %i\n", next.y);
-	bresneham_line_neg(&next, first, 0xFF0000, fdf);
+	bresneham_neg_grad(&next, first, 0xFF0000, fdf);
 }
 
-void	draw_next_lines(t_fdf_data *fdf, t_coords *start, t_coords *index)
-{
-	if (index->x == fdf->map_size[0] && index->y == fdf->map_size[1])
-		return ;//trigger the drawing of the lines...
-	else if (index->x == fdf->map_size[0])
-		//keep finding the points for all of the y..
-	else if (index->y == fdf->map_size[0])
-		//keep finding the points for x...
-	else 
-		//find the next point...right and left
-}
+// void	draw_next_lines(t_fdf_data *fdf, t_vector3 *start, t_vector3 *index)
+// {
+// 	if (index->x == fdf->map_size[0] && index->y == fdf->map_size[1])
+// 		return ;//trigger the drawing of the lines...
+// 	else if (index->x == fdf->map_size[0])
+// 		//keep finding the points for all of the y..
+// 	else if (index->y == fdf->map_size[0])
+// 		//keep finding the points for x...
+// 	else 
+// 		//find the next point...right and left
+// }
 
-void 	draw_wireframe(t_fdf_data *fdf, t_coords *start)
-{
-	t_coords	index;
+// void 	draw_wireframe(t_fdf_data *fdf, t_vector3 *start)
+// {
+// 	t_vector3	index;
 
-	index.x = 0;
-	index.y = 0;
-	draw_next_lines(fdf, start, &index);
+// 	index.x = 0;
+// 	index.y = 0;
+// 	draw_next_lines(fdf, start, &index);
 
-}
+// }
 //end grid printing
 
-//begin map input handling
+//begin camera intialize and transforms
 
+t_vector3	*new_vector3(void)
+{
+	t_vector3	*new;
+
+	new = (t_vector3 *) ft_calloc(1, sizeof(t_vector3));
+	return (new);
+}
+/*fills camera view with allocated vectors*/
+void	init_camera_view(t_fdf_data *fdf, int index)
+{
+	int	l;
+
+	l = 0;
+	while (l < fdf->map_size[0])
+	{
+		fdf->camera->camera_view[index][l] = new_vector3();
+		if (!fdf->camera->camera_view[index][l])
+			mlx_close(fdf);
+		l++;
+	}
+}
+
+void	init_camera(t_fdf_data *fdf)
+{
+	t_camera	*camera;
+	int			i;
+
+	i = 0;
+	camera = (t_camera *) ft_calloc(1, sizeof(t_camera));
+	if (!camera)
+		mlx_close(fdf);
+	camera->camera_view = (t_vector3 ***) ft_calloc(fdf->map_size[1], sizeof(t_vector3 **));
+	if (!camera->camera_view)
+		mlx_close(fdf);
+	fdf->camera = camera;
+	while (i < fdf->map_size[1])
+	{
+		camera->camera_view[i] = (t_vector3 **) ft_calloc(fdf->map_size[1], sizeof(t_vector3 **));
+		if (!camera->camera_view[i])
+			mlx_close(fdf);
+		init_camera_view(fdf, i);
+		i++;
+	}
+}
+/*copies and converts the vectors from the map to the camera, does not rotate view*/
+void	fill_camera_from_map(t_fdf_data *fdf)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < fdf->map_size[1])
+	{	
+		j = 0;
+		while(j < fdf->map_size[0])
+		{
+			fdf->camera->camera_view[i][j]->x = j;
+			fdf->camera->camera_view[i][j]->y = i;
+			fdf->camera->camera_view[i][j]->z = fdf->map[i][j];
+			j++;
+		}
+		i++;
+	}
+}
+//how to handle rounding...?
+void	transform_cam_vector(t_vector3 *vector, double rad_x, double rad_y)
+{
+	double	x;
+	double	y;
+	double	z;
+
+	x = vector->x * cos(rad_x) + vector->y * sin(rad_x) * sin(rad_y) + vector->z * sin(rad_x) * cos(rad_y);
+	y = vector->y * cos(rad_y) + vector->z * -sin(rad_y);
+	z = vector->x * -sin(rad_x) + vector->y * cos(rad_x) * sin(rad_y) + vector->z * cos(rad_x) * cos(rad_y);
+	vector->x = x;
+	vector->y = y;
+	vector->z = z;
+}
+/*will change the camera view based on the angles passed for rotation, may not need z rotation*/
+void	transform_camera_view(t_fdf_data *fdf, int deg_x, int deg_y)
+{
+	int	i;
+	int	j;
+	double	rad_x;
+	double	rad_y;
+
+	i = 0;
+	rad_x = deg_x * (M_PI / 180);
+	rad_y = deg_y * (M_PI / 180);
+	while (i < fdf->map_size[1])
+	{	
+		j = 0;
+		while(j < fdf->map_size[0])
+		{
+			transform_cam_vector(fdf->camera->camera_view[i][j], rad_x, rad_y);
+			j++;
+		}
+		i++;
+	}
+}
+
+//end camera intialize and transforms
+
+//begin project map
+/*need to know where to transfrom the 0,0 vector to on the image, begin without a translate or scaling*/
+
+
+//end project map
+
+//begin map input handling
 int	get_width(char **split_line)
 {
 	int	width;
@@ -358,7 +525,8 @@ void	set_grid_size(t_fdf_data **fdf)
 
 int	main(int argc, char **argv)
 {
-	t_coords	start_vector;
+	t_vector3	start_vector;
+	t_vector3	end;
 	t_fdf_data	*fdf;
 
 	if (argc == 1)
@@ -369,13 +537,22 @@ int	main(int argc, char **argv)
 	fdf->map = get_map(argv[1], fdf); // already exited if error
 	set_grid_size(&fdf);
 	ft_printf("I got the map!\n");
-	first_point(fdf, &start_vector);
-	next_point_right(fdf, &start_vector, fdf->map[0][1]);
+	// first_point(fdf, &start_vector);
+	// next_point_right(fdf, &start_vector, fdf->map[0][1]);
 	// ft_printf("first x: %i\n", start_vector.x);
 	// ft_printf("first y: %i\n", start_vector.y);
-	next_point_left(fdf, &start_vector, fdf->map[1][0]);
+	// next_point_left(fdf, &start_vector, fdf->map[1][0]);
 	// my_mlx_pixel_put(fdf->img1, &start_vector, 0xFF0000);
-	
+	start_vector.x = 200;
+	start_vector.y = 200;
+	end.x = 250;
+	end.y = 500;
+	bresneham_pos_steep(&start_vector, &end, 0xFF00FF, fdf);
+	// start_vector.x = 400;
+	// start_vector.y = 200;
+	// end.x = 425;
+	// end.y = 50;
+	// bresneham_neg_steep(&end, &start_vector, 0x00FFFF, fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img1->img, 0, 0);
 	mlx_hook(fdf->win, 17, 0, &mlx_close, fdf);
 	mlx_hook(fdf->win, 2, 1L<<0, handle_press, fdf);
