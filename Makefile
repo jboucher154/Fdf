@@ -25,7 +25,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(DEBUG) -o $(NAME) $(OBJS) $(MLX_COMPILE) $(LIB)
 
 %.o : %.c $(DEPS)
-	$(CC) $(CFLAGS) $(DEBUG) -c $< -o $@
+	@$(CC) $(CFLAGS) $(DEBUG) -c $< -o $@
 
 clean: 
 	$(MAKE) clean -C libft
