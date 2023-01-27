@@ -64,4 +64,19 @@ typedef struct			s_camera
 // 	int			color;
 // }				t_map_data;
 
+//for project
+void		draw_line(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf);
+void		my_mlx_pixel_put(t_img_data *data, t_vector3 *start, int color);
+int			mlx_close(t_fdf_data *fdf, int exit_code, char *exit_msg);
+int			handle_press(int key_code, t_fdf_data *fdf);
+t_fdf_data	*new_fdf(void);
+int			**get_map(char *fname, t_fdf_data *fdf);
+
+
+//for testing
+void	draw_horizontal(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf);
+void	bresneham_neg_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf);
+void	bresneham_neg_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf);
+void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf);
+void	bresneham_pos_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf);
 #endif
