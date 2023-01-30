@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 12:47:29 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/27 12:52:27 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/01/30 15:36:58 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	mlx_close(t_fdf_data *fdf, int exit_code, char *exit_msg) //add string and n
 	}
 	if (fdf->map)
 		free_int_2darr(fdf->map);
-	//free camera and contents
+	if (fdf->camera)
+		free(fdf->camera);
 	mlx_destroy_window(fdf->mlx, fdf->win);
 	free(fdf->mlx);
 	free(fdf);

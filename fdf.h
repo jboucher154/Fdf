@@ -48,7 +48,12 @@ typedef struct	s_vector3
 
 typedef struct			s_camera
 {
-	struct s_vector3	***camera_view; //malloc for 2d array of vectors, does it need to be array? maybe...
+	// struct s_vector3	***camera_view; //malloc for 2d array of vectors, does it need to be array? maybe...
+	int					rotation_x;
+	int					rotation_z;
+	int					scale;
+	int					translate_x;
+	int					translate_y;
 	/* may need following data 
 	rotation x
 	rotation y
@@ -71,6 +76,10 @@ int			mlx_close(t_fdf_data *fdf, int exit_code, char *exit_msg);
 int			handle_press(int key_code, t_fdf_data *fdf);
 t_fdf_data	*new_fdf(void);
 int			**get_map(char *fname, t_fdf_data *fdf);
+t_vector3	*get_camera_view(t_fdf_data *fdf, int	i, int j);
+void		new_camera(t_fdf_data *fdf);
+void		draw_camera_view(t_fdf_data *fdf);
+
 
 
 //for testing
