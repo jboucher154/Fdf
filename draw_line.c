@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 10:29:53 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/27 15:19:25 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/01/30 16:22:55 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	bresneham_pos_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_da
 	deltas.x = two.x - one.x;
 	deltas.y = two.y - one.y;
 	decision = 2 * deltas.y - deltas.x;
-	while (one.x < two.x)
+	while (one.x <= two.x)
 	{
 		my_mlx_pixel_put(fdf->img1, &one, color);
 		if (decision >= 0)
@@ -61,10 +61,10 @@ void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_d
 	deltas.x = two.x - one.x;
 	deltas.y = two.y - one.y;
 	decision = 2 * deltas.y - deltas.x;
-	while (one.y < two.y)
+	while (one.y <= two.y)
 	{
 		my_mlx_pixel_put(fdf->img1, &one, color);
-		if (decision >= 0)
+		if (decision >= 0 && first->x != second->x)
 		{
 			one.x += 1;
 			decision = decision + 2 * deltas.x - 2 * deltas.y;
@@ -88,17 +88,17 @@ void	bresneham_neg_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_da
 	deltas.x = two.x - one.x;
 	deltas.y = two.y - one.y;
 	decision = 2 * deltas.y + deltas.x;
-	while (one.x < two.x) //does this need to be >
+	while (one.x <= two.x) //does this need to be >
 	{
 		my_mlx_pixel_put(fdf->img1, &one, color);
 		if (decision >= 0)
 		{
 			one.y -= 1;
-			decision = decision - 2 * deltas.y + 2 * deltas.x;
+			decision = decision - 2 * (deltas.y + deltas.x);
 		}
 		else
 		{
-			decision = decision - 2 * deltas.y;
+			decision = decision - (2 * deltas.y);
 		}
 		one.x += 1;
 	}
@@ -115,7 +115,7 @@ void	bresneham_neg_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_d
 	deltas.x = two.x - one.x;
 	deltas.y = two.y - one.y;
 	decision = 2 * deltas.x + deltas.y;
-	while (one.y > two.y)
+	while (one.y >= two.y)
 	{
 		my_mlx_pixel_put(fdf->img1, &one, color);
 		if (decision >= 0)
@@ -139,7 +139,7 @@ void	draw_horizontal(t_vector3 *first, t_vector3 *second, int color, t_fdf_data 
 	{
 		temp.x = second->x;
 		temp.y = second->y;
-		while (temp.x < first->x)
+		while (temp.x <= first->x)
 		{
 			my_mlx_pixel_put(fdf->img1, &temp, color);
 			temp.x++;
@@ -149,7 +149,7 @@ void	draw_horizontal(t_vector3 *first, t_vector3 *second, int color, t_fdf_data 
 	{
 		temp.x = first->x;
 		temp.y = first->y;
-		while (temp.x < second->x)
+		while (temp.x <= second->x)
 		{
 			my_mlx_pixel_put(fdf->img1, &temp, color);
 			temp.x++;
@@ -159,22 +159,26 @@ void	draw_horizontal(t_vector3 *first, t_vector3 *second, int color, t_fdf_data 
 
 void	draw_line(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
 {
-	t_vector3	deltas;
+	// t_vector3	deltas;
+	double	delta_x;
+	double	delta_y;
 
-	deltas.x = second->x - first->x;
-	deltas.y = second->y - first->y;
+	// deltas.x = second->x - first->x;
+	// deltas.y = second->y - first->y;
+	delta_x = second->x - first->x;
+	delta_y = second->y - first->y;
 	if (second->y == first->y)
 		draw_horizontal(first, second, color, fdf);
-	else if (first->x > second->x)
+	else if (delta_x != 0 && delta_y / delta_x < 0) // first->x > second->x
 	{
-		if (deltas.y / deltas.x > 1)
+		if (delta_y / delta_x < -1) //check this condition
 			bresneham_neg_steep(first, second, color, fdf);
 		else
 			bresneham_neg_grad(first, second, color, fdf);
 	}
 	else
 	{
-		if (deltas.y / deltas.x > 1)
+		if (delta_x == 0 || delta_y / delta_x > 1) //added x=0 to avoid divide by zero
 			bresneham_pos_steep(first, second, color, fdf);
 		else
 			bresneham_pos_grad(first, second, color, fdf);	
