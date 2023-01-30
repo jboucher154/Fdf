@@ -2,7 +2,8 @@ NAME = fdf
 
 LIB = libft/libft.a
 
-SRCS = main.c draw_line.c mlx_close.c handle_press.c new_fdf.c get_map.c
+SRCS = main.c draw_line.c mlx_close.c handle_press.c new_fdf.c get_map.c \
+	 camera.c draw_camera_view.c
 
 OBJS = $(SRCS:.c=.o)
 
