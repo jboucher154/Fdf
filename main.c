@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 16:54:03 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/30 16:23:25 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/01/31 13:36:21 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ void	my_mlx_pixel_put(t_img_data *data, t_vector3 *start, int color)
 {
 	char	*dst;
 
-	dst = data->addr + ((start->y) * data->line_length + (start->x) * (data->bits_per_pixel / 8));
+	if (start->x > WIN_WIDTH -1 || start->x < 0 || start->y > WIN_HEIGHT -1 || start->y < 0)
+		return ;
+	dst = data->addr + (start->y * data->line_length + start->x * (data->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 	// ft_printf("pixel printed: %i, %i\n", start->x, start->y);
 }
@@ -49,19 +51,21 @@ int	main(int argc, char **argv)
 	new_camera(fdf);
 	draw_camera_view(fdf);
 
-	// start_vector.x = 577; ///////
-	// start_vector.y = 409;
-	// end.x = 607;
-	// end.y = 416;
-	// draw_line(&start_vector, &end, 0xFF00FF, fdf);
-	// my_mlx_pixel_put(fdf->img1, &start_vector, 0xFFFFFF);
-	// my_mlx_pixel_put(fdf->img1, &end, 0xFFFF00);
+	// start_vector.x = 500; ///////
+	// start_vector.y = 357;
+	// end.x = 535;
+	// end.y = 300;
+	// // draw_line(&start_vector, &end, 0xFF00FF, fdf);
+	// bresneham_neg_steep(&start_vector, &end, 0xFF00FF, fdf);
+	// my_mlx_pixel_put(fdf->img1, &start_vector, 0xFF0000);
+	// my_mlx_pixel_put(fdf->img1, &end, 0xFF0000);
 	
-	// start_vector.x = 568; ///////
-	// start_vector.y = 434;
-	// end.x = 607;
-	// end.y = 416;
-	// draw_line(&start_vector, &end, 0xFF00FF, fdf);
+	// start_vector.x = 465; ///////
+	// start_vector.y = 328;
+	// end.x = 500;
+	// end.y = 300;
+	// // draw_line(&start_vector, &end, 0xFF00FF, fdf);
+	// bresneham_neg_grad(&start_vector, &end, 0xFF0000, fdf);
 	// my_mlx_pixel_put(fdf->img1, &start_vector, 0xFFFF00);
 	// my_mlx_pixel_put(fdf->img1, &end, 0xFFFF00);
 
