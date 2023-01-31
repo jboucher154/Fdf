@@ -37,9 +37,9 @@ void	new_camera(t_fdf_data *fdf)
 	camera = (t_camera *) ft_calloc(1, sizeof(t_camera));
 	if (!camera)
 		mlx_close(fdf, 2, "Camera allocation failed");
-	camera->rotation_x = 35;
+	camera->rotation_x = 0;
 	camera->rotation_z = 45;
-	camera->scale = 30;
+	camera->scale = 50;
 	camera->translate_x = 500;
 	camera->translate_y = 500;
 	fdf->camera = camera;
@@ -62,7 +62,7 @@ void	rotate_cam_vector(t_camera *camera, t_vector3 *cam_view)
 {
 	double	x;
 	double	y;
-	// double	z;
+	double	z;
 	double	rad_x;
 	double	rad_z;
 	
@@ -70,18 +70,18 @@ void	rotate_cam_vector(t_camera *camera, t_vector3 *cam_view)
 	rad_z = camera->rotation_z * (M_PI / 180);
 	
 	// y x
-	x = cam_view->x * cos(rad_x) + cam_view->y * sin(rad_x) * sin(rad_z) + cam_view->z * sin(rad_x) * cos(rad_z);
-	y = cam_view->y * cos(rad_z) + cam_view->z * -sin(rad_z);
+	// x = cam_view->x * cos(rad_x) + cam_view->y * sin(rad_x) * sin(rad_z) + cam_view->z * sin(rad_x) * cos(rad_z);
+	// y = cam_view->y * cos(rad_z) + cam_view->z * -sin(rad_z);
 	// z = cam_view->x * -sin(rad_x) + cam_view->y * cos(rad_x) * sin(rad_z) + cam_view->z * cos(rad_x) * cos(rad_z);
 
 	// // x z
-	// x = cam_view->x * cos(rad_z) + cam_view->y * -sin(rad_z);
-	// y = cam_view->x * cos(rad_x) * sin(rad_z) + cam_view->y * cos(rad_z) * cos(rad_x) + cam_view->z * -sin(rad_x);
-	// z = cam_view->x * sin(rad_x) * sin(rad_z) + cam_view->y * cos(rad_z) * sin(rad_x) + cam_view->z * cos(rad_x);
+	x = cam_view->x * cos(rad_z) + cam_view->y * -sin(rad_z);
+	y = cam_view->x * cos(rad_x) * sin(rad_z) + cam_view->y * cos(rad_z) * cos(rad_x) + cam_view->z * -sin(rad_x);
+	z = cam_view->x * sin(rad_x) * sin(rad_z) + cam_view->y * cos(rad_z) * sin(rad_x) + cam_view->z * cos(rad_x);
 	
 	cam_view->x = x;
 	cam_view->y = y;
-	// cam_view->z = z;
+	cam_view->z = z;
 }
 
 t_vector3	*get_camera_view(t_fdf_data *fdf, int	i, int j)
@@ -94,13 +94,15 @@ t_vector3	*get_camera_view(t_fdf_data *fdf, int	i, int j)
 	cam_view->x = j;
 	cam_view->y = i;
 	cam_view->z = fdf->map[i][j];
+	
 	// print_vector3(cam_view, "Before changed");//
 	scale_vector(fdf->camera, cam_view);
 	// print_vector3(cam_view, "After scale");//
-	translate_point(fdf->camera, cam_view);
-	// print_vector3(cam_view, "After translate");//
 	rotate_cam_vector(fdf->camera, cam_view);
 	// print_vector3(cam_view, "After rotate");//
+	translate_point(fdf->camera, cam_view);
+	// print_vector3(cam_view, "After translate");//
+
 	// ft_printf("\n");
 	return (cam_view);
 }

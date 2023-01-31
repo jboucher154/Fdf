@@ -171,14 +171,14 @@ void	draw_line(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
 		draw_horizontal(first, second, color, fdf);
 	else if (delta_x != 0 && delta_y / delta_x < 0) // first->x > second->x
 	{
-		if (delta_y / delta_x < -1) //check this condition
+		if (delta_y / delta_x <= -1) //check this condition
 			bresneham_neg_steep(first, second, color, fdf);
 		else
 			bresneham_neg_grad(first, second, color, fdf);
 	}
 	else
 	{
-		if (delta_x == 0 || delta_y / delta_x > 1) //added x=0 to avoid divide by zero
+		if (delta_x == 0 || delta_y / delta_x >= 1) //added x=0 to avoid divide by zero
 			bresneham_pos_steep(first, second, color, fdf);
 		else
 			bresneham_pos_grad(first, second, color, fdf);	
