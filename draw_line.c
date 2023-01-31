@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 10:29:53 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/30 16:22:55 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/01/31 13:35:33 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,18 @@ void	bresneham_pos_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_da
 	set_temps(&one, &two, first, second);
 	deltas.x = two.x - one.x;
 	deltas.y = two.y - one.y;
-	decision = 2 * deltas.y - deltas.x;
+	decision = (2 * deltas.y) - deltas.x;
 	while (one.x <= two.x)
 	{
 		my_mlx_pixel_put(fdf->img1, &one, color);
 		if (decision >= 0)
 		{
 			one.y += 1;
-			decision = decision + 2 * deltas.y - 2 * deltas.x;
+			decision += 2 * (deltas.y - deltas.x);
 		}
 		else
 		{
-			decision = decision + 2 * deltas.y;
+			decision += 2 * deltas.y;
 		}
 		one.x += 1;
 	}
@@ -60,18 +60,18 @@ void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_d
 	set_temps(&one, &two, first, second);
 	deltas.x = two.x - one.x;
 	deltas.y = two.y - one.y;
-	decision = 2 * deltas.y - deltas.x;
+	decision = (2 * deltas.y) - deltas.x;
 	while (one.y <= two.y)
 	{
 		my_mlx_pixel_put(fdf->img1, &one, color);
 		if (decision >= 0 && first->x != second->x)
 		{
 			one.x += 1;
-			decision = decision + 2 * deltas.x - 2 * deltas.y;
+			decision += 2 * (deltas.x - deltas.y);
 		}
 		else
 		{
-			decision = decision + 2 * deltas.x;
+			decision += 2 * deltas.x;
 		}
 		one.y += 1;
 	}
@@ -86,19 +86,19 @@ void	bresneham_neg_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_da
 
 	set_temps(&one, &two, first, second);
 	deltas.x = two.x - one.x;
-	deltas.y = two.y - one.y;
-	decision = 2 * deltas.y + deltas.x;
-	while (one.x <= two.x) //does this need to be >
+	deltas.y = (two.y - one.y) * -1;
+	decision = (2 * deltas.y) - deltas.x;
+	while (one.x < two.x)
 	{
 		my_mlx_pixel_put(fdf->img1, &one, color);
 		if (decision >= 0)
 		{
 			one.y -= 1;
-			decision = decision - 2 * (deltas.y + deltas.x);
+			decision += 2 * (deltas.y - deltas.x);
 		}
 		else
 		{
-			decision = decision - (2 * deltas.y);
+			decision += 2 * deltas.y;
 		}
 		one.x += 1;
 	}
@@ -112,20 +112,20 @@ void	bresneham_neg_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_d
 	t_vector3	two;
 
 	set_temps(&one, &two, first, second);
-	deltas.x = two.x - one.x;
+	deltas.x = (two.x - one.x);
 	deltas.y = two.y - one.y;
-	decision = 2 * deltas.x + deltas.y;
-	while (one.y >= two.y)
+	decision = (2 * deltas.y) - deltas.x;
+	while (one.y > two.y)
 	{
 		my_mlx_pixel_put(fdf->img1, &one, color);
 		if (decision >= 0)
 		{
 			one.x += 1;
-			decision = decision - 2 * deltas.x + 2 * deltas.y;
+			decision += 2 * (deltas.x + deltas.y);
 		}
 		else
 		{
-			decision = decision - 2 * deltas.x;
+			decision += 2 * deltas.x;
 		}
 		one.y -= 1;
 	}
@@ -171,16 +171,36 @@ void	draw_line(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
 		draw_horizontal(first, second, color, fdf);
 	else if (delta_x != 0 && delta_y / delta_x < 0) // first->x > second->x
 	{
-		if (delta_y / delta_x <= -1) //check this condition
-			bresneham_neg_steep(first, second, color, fdf);
+		if (delta_y / delta_x < -1) //check this condition
+		{
+			if (first->x > second->x) // or y?
+				bresneham_neg_steep(second, first, color, fdf);
+			else
+				bresneham_neg_steep(first, second, color, fdf);
+		}
 		else
-			bresneham_neg_grad(first, second, color, fdf);
+		{
+			if (first->x > second->x)
+				bresneham_neg_grad(second, first, color, fdf);
+			else
+				bresneham_neg_grad(first, second, color, fdf);
+		}
 	}
 	else
 	{
-		if (delta_x == 0 || delta_y / delta_x >= 1) //added x=0 to avoid divide by zero
-			bresneham_pos_steep(first, second, color, fdf);
+		if (delta_x == 0 || delta_y / delta_x > 1) //added x=0 to avoid divide by zero
+		{
+			if (first->x > second->x)
+				bresneham_pos_steep(second, first, color, fdf);
+			else
+				bresneham_pos_steep(first, second, color, fdf);
+		}
 		else
-			bresneham_pos_grad(first, second, color, fdf);	
+		{
+			if (first->x > second->x)
+				bresneham_pos_grad(second, first, color, fdf);
+			else
+				bresneham_pos_grad(first, second, color, fdf);
+		}
 	}
 }
