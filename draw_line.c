@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 10:29:53 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/31 13:35:33 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/01/31 17:14:40 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "libft.h"
 #include "ft_printf.h"
 
-
-void	set_temps(t_vector3 *one, t_vector3 *two, t_vector3 *first, t_vector3 *second)
+void	set_temps(t_vector3 *one, t_vector3 *two, t_vector3 *first, \
+		t_vector3 *second)
 {
 	one->x = first->x;
 	one->y = first->y;
@@ -23,7 +23,8 @@ void	set_temps(t_vector3 *one, t_vector3 *two, t_vector3 *first, t_vector3 *seco
 	two->y = second->y;
 }
 
-void	bresneham_pos_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
+void	bresneham_pos_grad(t_vector3 *first, t_vector3 *second, int color, \
+		t_fdf_data *fdf)
 {
 	t_vector3	deltas;
 	t_vector3	one;
@@ -50,7 +51,8 @@ void	bresneham_pos_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_da
 	}
 }
 
-void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
+void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, \
+		t_fdf_data *fdf)
 {
 	t_vector3	deltas;
 	t_vector3	one;
@@ -77,7 +79,8 @@ void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_d
 	}
 }
 
-void	bresneham_neg_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
+void	bresneham_neg_grad(t_vector3 *first, t_vector3 *second, int color, \
+		t_fdf_data *fdf)
 {
 	t_vector3	deltas;
 	int			decision;
@@ -104,7 +107,8 @@ void	bresneham_neg_grad(t_vector3 *first, t_vector3 *second, int color, t_fdf_da
 	}
 }
 
-void	bresneham_neg_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
+void	bresneham_neg_steep(t_vector3 *first, t_vector3 *second, int color, \
+		t_fdf_data *fdf)
 {
 	t_vector3	deltas;
 	int			decision;
@@ -131,7 +135,8 @@ void	bresneham_neg_steep(t_vector3 *first, t_vector3 *second, int color, t_fdf_d
 	}
 }
 
-void	draw_horizontal(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
+void	draw_horizontal(t_vector3 *first, t_vector3 *second, int color, \
+		t_fdf_data *fdf)
 {
 	t_vector3	temp;
 
@@ -157,23 +162,21 @@ void	draw_horizontal(t_vector3 *first, t_vector3 *second, int color, t_fdf_data 
 	}
 }
 
-void	draw_line(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
+void	draw_line(t_vector3 *first, t_vector3 *second, int color, \
+		t_fdf_data *fdf)
 {
-	// t_vector3	deltas;
 	double	delta_x;
 	double	delta_y;
 
-	// deltas.x = second->x - first->x;
-	// deltas.y = second->y - first->y;
 	delta_x = second->x - first->x;
 	delta_y = second->y - first->y;
 	if (second->y == first->y)
 		draw_horizontal(first, second, color, fdf);
-	else if (delta_x != 0 && delta_y / delta_x < 0) // first->x > second->x
+	else if (delta_x != 0 && delta_y / delta_x < 0)
 	{
-		if (delta_y / delta_x < -1) //check this condition
+		if (delta_y / delta_x < -1)
 		{
-			if (first->x > second->x) // or y?
+			if (first->x > second->x)
 				bresneham_neg_steep(second, first, color, fdf);
 			else
 				bresneham_neg_steep(first, second, color, fdf);
@@ -188,7 +191,7 @@ void	draw_line(t_vector3 *first, t_vector3 *second, int color, t_fdf_data *fdf)
 	}
 	else
 	{
-		if (delta_x == 0 || delta_y / delta_x > 1) //added x=0 to avoid divide by zero
+		if (delta_x == 0 || delta_y / delta_x > 1)
 		{
 			if (first->x > second->x)
 				bresneham_pos_steep(second, first, color, fdf);

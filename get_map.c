@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 14:35:44 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/27 14:42:52 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/01/31 17:12:31 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,47 +41,48 @@ int	*convert_to_ints(int width, char **split_line)
 	return (num_arr);
 }
 
+void	transfer_to_map(t_fdf_data *fdf, int fd, char **split_line, int **map)
+{
+	if (!split_line)
+	{
+		close(fd);
+		mlx_close(fdf, 2, "Map split failed");
+	}
+	if (split_line && fdf->map_size[0] == 0)
+		fdf->map_size[0] = get_width(split_line);
+	map[fdf->map_size[1]] = convert_to_ints(fdf->map_size[0], split_line);
+	if (!map[fdf->map_size[1]])
+	{
+		close(fd);
+		mlx_close(fdf, 2, "Map row allocation failed");
+	}
+}
+
 int	**map_from_file(ssize_t fd, t_fdf_data *fdf)
 {
 	int		**map;
 	char	*line;
-	char 	**split_line;
-	int		size[2];
-	
-	map = (int **) ft_calloc(1000, sizeof(int *)); //how big to reserve... should it double at some point?
-	size[0] = 0;
-	size[1] = 0;
+	char	**split_line;
+
+	map = (int **) ft_calloc(1000, sizeof(int *));
 	line = get_next_line(fd);
 	while (line)
 	{
 		split_line = ft_split(line, ' ');
-		if (!split_line)
-		{
-			close(fd);
-			mlx_close(fdf, 2, "Map split failed");
-		}
-		if (split_line && size[0] == 0)
-			size[0] = get_width(split_line);
-		map[size[1]] = convert_to_ints(size[0], split_line);
-		if (!map[size[1]])
-		{
-			close(fd);
-			mlx_close(fdf, 2, "Map row allocation failed");
-		}
+		transfer_to_map(fdf, fd, split_line, map);
+		free_str_2darr(split_line);
 		free (line);
 		line = get_next_line(fd);
-		size[1]++;
+		fdf->map_size[1]++;
 	}
 	free (line);
-	fdf->map_size[0] = size[0];
-	fdf->map_size[1] = size[1];
 	return (map);
 }
 
-int	**get_map(char *fname, t_fdf_data *fdf) //could also put fdf here to add the map dimensions...and send for freeing in case of error
+int	**get_map(char *fname, t_fdf_data *fdf)
 {
 	ssize_t	fd;
-	int		**map;//could be made a 2d array of t_map_data...
+	int		**map;
 
 	fd = open(fname, O_RDONLY);
 	if (fd < 0)

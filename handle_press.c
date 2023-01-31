@@ -6,13 +6,12 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 14:16:44 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/27 14:28:01 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/01/31 16:21:10 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "ft_printf.h"
-//hook handling and exiting
 
 int	handle_press(int key_code, t_fdf_data *fdf)
 {
@@ -23,4 +22,3 @@ int	handle_press(int key_code, t_fdf_data *fdf)
 	}
 	return (0);
 }
-//end hook handling
