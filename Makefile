@@ -25,10 +25,12 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(MAKE) -C libft
-	$(CC) $(CFLAGS) $(DEBUG) -o $(NAME) $(OBJS) $(MLX) $(MLX_COMPILE) $(LIB) 
+	$(CC) $(CFLAGS) $(DEBUG) -o $(NAME) $(OBJS) $(MLX_COMPILE) $(LIB) 
+	# $(CC) $(CFLAGS) $(DEBUG) -o $(NAME) $(OBJS) $(MLX) $(MLX_COMPILE) $(LIB) 
 
 %.o : %.c $(DEPS)
-	@$(CC) $(CFLAGS) $(DEBUG) -Iminilibx-linux -c $< -o $@
+	@$(CC) $(CFLAGS) $(DEBUG) -c $< -o $@
+	# @$(CC) $(CFLAGS) $(DEBUG) -Iminilibx-linux -c $< -o $@
 
 clean: 
 	$(MAKE) clean -C libft
