@@ -3,7 +3,7 @@ NAME = fdf
 LIB = libft/libft.a
 
 SRCS = main.c draw_line.c mlx_close.c handle_press.c new_fdf.c get_map.c \
-	 get_camera_view.c draw_camera_view.c new_camera.c
+	 get_camera_view.c draw_camera_view.c new_camera.c line_utility.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -13,7 +13,8 @@ CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -I.
 
-DEBUG = -g -fsanitize=address
+# DEBUG = -g -fsanitize=address
+DEBUG = -g
 
 # MLX = -Imlx
 MLX = -Lminilibx-linux -lmlx -L/usr/X11/include/../lib -lXext -lX11 -lm
