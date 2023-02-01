@@ -6,20 +6,11 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 12:23:04 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/31 17:00:53 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/01 16:44:16 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-void	free_temp_check(t_vector3 **temp)
-{
-	if (*temp)
-	{
-		free(*temp);
-		(*temp) = NULL;
-	}
-}
 
 void	get_points_and_draw(t_fdf_data *fdf, int i, int j)
 {
@@ -31,16 +22,16 @@ void	get_points_and_draw(t_fdf_data *fdf, int i, int j)
 	if (j + 1 < fdf->map_size[0])
 	{
 		temp_2 = get_camera_view(fdf, i, j + 1);
-		draw_line(temp_1, temp_2, 0xFFFFF, fdf);
+		draw_line(temp_1, temp_2, fdf);
+		free(temp_2);
 	}
-	free_temp_check(&temp_2);
 	if (i + 1 < fdf->map_size[1])
 	{
 		temp_2 = get_camera_view(fdf, i + 1, j);
-		draw_line(temp_1, temp_2, 0xFFFFF, fdf);
+		draw_line(temp_1, temp_2, fdf);
+		free(temp_2);
 	}
-	free_temp_check(&temp_1);
-	free_temp_check(&temp_2);
+	free(temp_1);
 }
 
 void	draw_camera_view(t_fdf_data *fdf)
@@ -60,3 +51,44 @@ void	draw_camera_view(t_fdf_data *fdf)
 		i++;
 	}
 }
+
+void	redraw(t_fdf_data *fdf)
+{
+	mlx_destroy_image(fdf->mlx, fdf->img1->img);
+	free(fdf->img1);
+	get_new_image(fdf);
+	if (!fdf->img1)
+		mlx_close(fdf, 1, "Image allocation failed");
+	fdf->img1->addr = mlx_get_data_addr(fdf->img1->img, \
+	&fdf->img1->bits_per_pixel, &fdf->img1->line_length, \
+	&fdf->img1->endian);
+	draw_camera_view(fdf);
+	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img1->img, 0, 0);
+	fdf->dirty = 0;
+}
+
+// void	draw_camera_view(t_fdf_data *fdf)
+// {
+// 	int			coords[2];
+// 	t_vector3	*temp_1;
+// 	t_vector3	*temp_2;
+
+// 	coords[1] = 0;
+// 	temp_1 = NULL;
+// 	temp_2 = NULL;
+// 	while (coords[1] < fdf->map_size[1])
+// 	{
+// 		coords[0] = 0;
+// 		while (coords[0] < fdf->map_size[0])
+// 		{
+// 			get_points_and_draw(fdf, coords, temp_1, temp_2);
+// 			coords[0]++;
+// 		}
+// 		coords[1]++;
+// 	}
+// 	if (temp_2)
+// 	{
+// 		free(temp_2);
+// 		(temp_2) = NULL;
+// 	}
+// }
