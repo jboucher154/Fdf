@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 14:35:44 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/31 17:12:31 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/01 16:15:10 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	*convert_to_ints(int width, char **split_line)
 	num_arr = (int *) ft_calloc(width, sizeof(int));
 	if (!num_arr)
 		return (NULL);
-	while (split_line[i])
+	while (i < width)
 	{
 		num_arr[i] = ft_atoi(split_line[i]);
 		i++;
@@ -75,7 +75,6 @@ int	**map_from_file(ssize_t fd, t_fdf_data *fdf)
 		line = get_next_line(fd);
 		fdf->map_size[1]++;
 	}
-	free (line);
 	return (map);
 }
 
