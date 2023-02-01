@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:39:47 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/31 16:28:01 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/01 15:38:36 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,10 @@ t_vector3	*get_camera_view(t_fdf_data *fdf, int i, int j)
 	cam_view->x = j;
 	cam_view->y = i;
 	cam_view->z = fdf->map[i][j];
+	if (cam_view->z > 1)
+		cam_view->color = 0x00F000;
+	else
+		cam_view->color = 0xFFFFFF;
 	scale_vector(fdf->camera, cam_view);
 	rotate_cam_vector(fdf->camera, cam_view);
 	translate_point(fdf->camera, cam_view);
