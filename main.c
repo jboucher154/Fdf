@@ -6,24 +6,13 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 16:54:03 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/31 16:44:46 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/01 18:03:12 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft.h"
 #include "ft_printf.h"
-
-void	my_mlx_pixel_put(t_img_data *data, t_vector3 *pt, int color)
-{
-	char	*dst;
-
-	if (pt->x >= WIN_WIDTH || pt->x < 0 || pt->y >= WIN_HEIGHT || pt->y < 0)
-		return ;
-	dst = data->addr + (pt->y * data->line_length + pt->x * \
-	(data->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
-}
 
 int	main(int argc, char **argv)
 {
@@ -32,6 +21,7 @@ int	main(int argc, char **argv)
 	if (argc == 1)
 		exit(1);
 	fdf = create_fdf(argv[1]);
+	// mlx_close(fdf, 2, "error...");
 	if (!fdf)
 		exit(1);
 	draw_camera_view(fdf);
