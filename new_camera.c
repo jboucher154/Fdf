@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 14:48:33 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/31 16:44:07 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/01 10:43:51 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,30 @@ int	initial_scale(t_fdf_data *fdf)
 		return (2);
 	if (w_ratio < h_ratio)
 	{
-		if (w_ratio > 30)
-			return (w_ratio / 10 + 1);
+		if (w_ratio > 80)
+			return (w_ratio / 5 + 1);
 		return (w_ratio);
 	}
 	else
 	{
-		if (h_ratio > 30)
-			return (h_ratio / 10 + 1);
+		if (h_ratio > 80)
+			return (h_ratio / 5 + 1);
 		return (h_ratio);
 	}
+}
+
+void	initial_translate(t_fdf_data *fdf, t_camera *new)
+{
+	t_vector3	*mid;
+	int			x;
+	int			y;
+
+	x = fdf->map_size[0] / 2;
+	y = fdf->map_size[1] / 2;
+	mid = get_camera_view(fdf, y, x);
+	new->translate_x = WIN_WIDTH / 2 - mid->x;
+	new->translate_y = WIN_HEIGHT / 2 - mid->y;
+	free(mid);
 }
 
 void	new_camera(t_fdf_data *fdf)
@@ -44,10 +58,11 @@ void	new_camera(t_fdf_data *fdf)
 	camera = (t_camera *) ft_calloc(1, sizeof(t_camera));
 	if (!camera)
 		mlx_close(fdf, 2, "Camera allocation failed");
+	fdf->camera = camera;
 	camera->rotation_x = 35;
 	camera->rotation_z = 45;
 	camera->scale = initial_scale(fdf);
-	camera->translate_x = (WIN_WIDTH - fdf->map_size[0] * camera->scale) / 2;
-	camera->translate_y = (WIN_HEIGHT - fdf->map_size[1] * camera->scale) / 2;
-	fdf->camera = camera;
+	camera->translate_x = 0;
+	camera->translate_y = 0;
+	initial_translate(fdf, camera);
 }
