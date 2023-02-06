@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 14:35:44 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/01 16:15:10 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:12:13 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,21 @@ void	transfer_to_map(t_fdf_data *fdf, int fd, char **split_line, int **map)
 int	**map_from_file(ssize_t fd, t_fdf_data *fdf)
 {
 	int		**map;
-	char	*line;
+	char	*row;
 	char	**split_line;
 
 	map = (int **) ft_calloc(1000, sizeof(int *));
-	line = get_next_line(fd);
-	while (line)
+	row = get_next_line(fd);
+	split_line = NULL;
+	while (row)
 	{
-		split_line = ft_split(line, ' ');
+		split_line = ft_split(row, ' ');
 		transfer_to_map(fdf, fd, split_line, map);
 		free_str_2darr(split_line);
-		free (line);
-		line = get_next_line(fd);
-		fdf->map_size[1]++;
+		free(row);
+		row = NULL;
+		row = get_next_line(fd);
+		fdf->map_size[1] += 1;
 	}
 	return (map);
 }
@@ -81,13 +83,16 @@ int	**map_from_file(ssize_t fd, t_fdf_data *fdf)
 int	**get_map(char *fname, t_fdf_data *fdf)
 {
 	ssize_t	fd;
+	size_t	r;
 	int		**map;
 
 	fd = open(fname, O_RDONLY);
 	if (fd < 0)
 		mlx_close(fdf, 2, "No such file or directory");
 	map = map_from_file(fd, fdf);
-	close(fd); //check for close error
+	r = close(fd);
+	if (r < 0)
+		mlx_close(fdf, 2, "Close failed");
 	if (!map)
 		mlx_close(fdf, 2, "Map allocation failed");
 	return (map);

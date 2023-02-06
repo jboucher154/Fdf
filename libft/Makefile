@@ -21,7 +21,7 @@ SRCS =  ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 		ft_lstsize.c ft_lstnew.c ft_lstmap.c ft_lstlast.c ft_lstiter.c ft_lstdelone.c \
 		ft_lstclear.c ft_lstadd_front.c ft_lstadd_back.c ft_printf.c conversion.c \
 		flags.c handle_specifiers.c legend.c characters.c hexadecimal.c itoa_base.c \
-		numbers.c padding.c percent.c unsigned.c num_utils.c get_next_line.c
+		numbers.c padding.c percent.c unsigned.c num_utils.c get_next_line.c ft_gnl_join.c
 		
 OBJS = $(SRCS:.c=.o)
 

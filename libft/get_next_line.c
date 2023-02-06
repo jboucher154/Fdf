@@ -5,108 +5,127 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/08 15:56:57 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/16 14:41:21 by jebouche         ###   ########.fr       */
+/*   Created: 2023/02/02 14:59:45 by jebouche          #+#    #+#             */
+/*   Updated: 2023/02/06 09:32:05 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-static int	read_to_buffer(char	*buffer, int fd, size_t *buff_index);
-static void	add_to_string(char **dst, char *to_cpy, size_t *index, size_t len);
-static char	*eof_or_error(char *line, int ret);
-static int	copy_len(char *buffer, size_t b_index);
-
-char	*get_next_line(int fd)
+/*reads up to a buffer length into an allocated string that is returned. On 
+allocation failure NULL is returned. On read failure or end of file reached 
+the allocated string is freed and NULL is returned*/
+static ssize_t	fill_cache(int fd, char **cache)
 {
-	static char		buffer[BUFFER_SIZE + 1];
-	static size_t	b_index = BUFFER_SIZE;
-	char			*line;
-	int				read_ret;
+	ssize_t		returned;
 
-	read_ret = 1;
-	line = (char *) malloc(sizeof(char) * 1);
-	if (line)
+	if (*cache)
+		free(*cache);
+	*cache = (char *) malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!(*cache))
+		return (-1);
+	returned = read(fd, *cache, BUFFER_SIZE);
+	if (returned <= 0)
 	{
-		line[0] = '\0';
-		while (ft_strchr(line, '\n') == NULL && read_ret > 0)
-		{
-			if (b_index == BUFFER_SIZE)
-			{
-				read_ret = read_to_buffer(buffer, fd, &b_index);
-				if (read_ret == -1 || (read_ret == 0 && ft_strlen(line) == 0))
-					return (eof_or_error(line, read_ret));
-			}
-			if (copy_len(buffer, b_index) == 0)
-				return (eof_or_error(line, read_ret));
-			add_to_string(&line, buffer, &b_index, copy_len(buffer, b_index));
-		}
+		free(*cache);
+		return (returned);
 	}
-	return (line);
-}
-
-static char	*eof_or_error(char *line, int ret)
-{
-	if (ret == -1 || (ret == 0 && ft_strlen(line) == 0) || line[0] == '\0')
-	{
-		free(line);
-		return (NULL);
-	}
-	else
-		return (line);
-}
-
-static int	read_to_buffer(char	*buffer, int fd, size_t *buff_index)
-{
-	ssize_t	returned;
-
-	returned = read(fd, buffer, BUFFER_SIZE);
-	if (returned > 0)
-	{
-		buffer[returned] = '\0';
-		*buff_index = 0;
-	}
+	(*cache)[returned] = '\0';
 	return (returned);
 }
 
-static void	add_to_string(char **dst, char *to_cpy, size_t *index, size_t len)
+static char	*copy_to_temp(char *cache, size_t *len)
 {
-	int		dest_index;
-	int		i;
 	char	*temp;
+	size_t	i;
 
 	i = 0;
-	dest_index = ft_strlen(*dst);
-	temp = (char *) malloc(sizeof(char) * (dest_index + len + 1));
-	if (temp && dst)
+	while (cache[(*len)] != '\0')
 	{
-		while (i < dest_index)
+		if (cache[(*len)] == '\n')
 		{
-			temp[i] = (*dst)[i];
-			i++;
+			(*len) += 1;
+			break ;
 		}
-		free(*dst);
-		*dst = temp;
-		while (len > 0 && to_cpy)
+		(*len) += 1;
+	}
+	temp = (char *) malloc(sizeof(char) * (*len + 1));
+	if (!temp)
+		return (NULL);
+	temp[(*len)] = '\0';
+	while (i < (*len))
+	{
+		temp[i] = cache[i];
+		i++;
+	}
+	return (temp);
+}
+
+static char	*get_line(int fd, char *cache, char **line, ssize_t *returned)
+{
+	char	*temp;
+	size_t	len;
+
+	len = 0;
+	if (!cache)
+		*returned = fill_cache(fd, &cache);
+	while (*returned > 0 && cache && cache[0] != '\0')
+	{
+		temp = copy_to_temp(cache, &len);
+		if (ft_strchr(temp, '\n') != NULL)
 		{
-			(*dst)[dest_index++] = to_cpy[(*index)++];
-			len--;
+			ft_strlcpy(cache, cache + len, BUFFER_SIZE);
+			*line = ft_gnl_join(*line, temp);
+			temp = NULL;
+			return (cache);
 		}
-		(*dst)[dest_index] = '\0';
+		else if (len == ft_strlen(cache))
+		{
+			*line = ft_gnl_join(*line, temp);
+			temp = NULL;
+			*returned = fill_cache(fd, &cache);
+			len = 0;
+		}
+	}
+	return (NULL);
+}
+
+void	clean_cache(char **cache)
+{
+	size_t	i;
+
+	i = 0;
+	if (*cache && *cache[i] == '\0')
+	{
+		free(*cache);
+		*cache = NULL;
 	}
 }
 
-static int	copy_len(char *buffer, size_t b_index)
+char	*get_next_line(int fd)
 {
-	int	i;
+	char		*line;
+	static char	*caches[256];
+	ssize_t		returned;
 
-	i = 0;
-	while (buffer[b_index] != '\0')
+	if (fd < 0 || fd >= 256 || BUFFER_SIZE <= 0)
+		return (NULL);
+	line = (char *) malloc(sizeof(char) * 1);
+	if (!line)
+		return (NULL);
+	line[0] = '\0';
+	returned = 1;
+	caches[fd] = get_line(fd, caches[fd], &line, &returned);
+	clean_cache(&caches[fd]);
+	if (returned == 0 || returned == -1)
 	{
-		if (buffer[b_index] == '\n')
-			return (i + 1);
-		b_index++;
-		i++;
+		if (line && line[0] == '\0')
+		{
+			free(line);
+			return (NULL);
+		}
+		else
+			return (line);
 	}
-	return (i);
+	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 12:23:04 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/01 16:44:16 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:08:24 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,29 +66,3 @@ void	redraw(t_fdf_data *fdf)
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img1->img, 0, 0);
 	fdf->dirty = 0;
 }
-
-// void	draw_camera_view(t_fdf_data *fdf)
-// {
-// 	int			coords[2];
-// 	t_vector3	*temp_1;
-// 	t_vector3	*temp_2;
-
-// 	coords[1] = 0;
-// 	temp_1 = NULL;
-// 	temp_2 = NULL;
-// 	while (coords[1] < fdf->map_size[1])
-// 	{
-// 		coords[0] = 0;
-// 		while (coords[0] < fdf->map_size[0])
-// 		{
-// 			get_points_and_draw(fdf, coords, temp_1, temp_2);
-// 			coords[0]++;
-// 		}
-// 		coords[1]++;
-// 	}
-// 	if (temp_2)
-// 	{
-// 		free(temp_2);
-// 		(temp_2) = NULL;
-// 	}
-// }

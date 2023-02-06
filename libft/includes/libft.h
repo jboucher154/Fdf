@@ -70,5 +70,6 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list	*ft_lstnew(void *content);
 int		ft_lstsize(t_list *lst);
 char	*get_next_line(int fd);
+char    *ft_gnl_join(char *s1, char *s2);
 
 #endif

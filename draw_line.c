@@ -6,13 +6,12 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 10:29:53 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/01 15:33:38 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:10:12 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft.h"
-// #include "ft_printf.h"
 
 void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, \
 		t_fdf_data *fdf)
@@ -143,6 +142,8 @@ void	draw_line(t_vector3 *first, t_vector3 *second, \
 	delta_y = second->y - first->y;
 	if (second->y == first->y)
 		draw_horizontal(first, second, color, fdf);
+	else if (second-> x == first->x)
+		draw_vertical(first, second, color, fdf);
 	else if (delta_y / delta_x >= -1 && delta_y / delta_x <= 1)
 	{
 		bresneham_grad(first, second, color, fdf);

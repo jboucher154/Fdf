@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 12:47:29 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/01 17:11:43 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:04:34 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ void	free_str_2darr(char **to_free)
 	while (to_free[i])
 	{
 		free(to_free[i]);
+		to_free[i] = NULL;
 		i++;
 	}
 	free(to_free);
+	to_free = NULL;
 }
 
 void	free_int_2darr(int **to_free, t_fdf_data *fdf)
@@ -44,6 +46,7 @@ int	mlx_close(t_fdf_data *fdf, int exit_code, char *exit_msg)
 	if (fdf->img1)
 	{
 		mlx_destroy_image(fdf->mlx, fdf->img1->img);
+		fdf->img1->img = NULL;
 		free(fdf->img1);
 	}
 	if (fdf->map)
@@ -51,10 +54,12 @@ int	mlx_close(t_fdf_data *fdf, int exit_code, char *exit_msg)
 	if (fdf->camera)
 		free(fdf->camera);
 	if (fdf->win)
+	{
 		mlx_destroy_window(fdf->mlx, fdf->win);
+		fdf->win = NULL;
+	}
 	if (fdf->mlx)
-		free(fdf->mlx);
-	free(fdf);
+		fdf->mlx = NULL;
 	if (exit_code)
 		ft_putendl_fd(exit_msg, 2);
 	exit(exit_code);

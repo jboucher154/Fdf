@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 12:35:27 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/01 15:38:05 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:10:26 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,31 @@ int	set_line_color(t_vector3 *first, t_vector3 *second)
 		return (first->color);
 	else
 		return (second->color);
+}
+
+void	draw_vertical(t_vector3 *first, t_vector3 *second, int color, \
+		t_fdf_data *fdf)
+{
+	t_vector3	temp;
+
+	if (first->y > second->y)
+	{
+		temp.x = second->x;
+		temp.y = second->y;
+		while (temp.y <= first->y)
+		{
+			my_mlx_pixel_put(fdf->img1, &temp, color);
+			temp.y++;
+		}
+	}
+	else
+	{
+		temp.x = first->x;
+		temp.y = first->y;
+		while (temp.y <= second->y)
+		{
+			my_mlx_pixel_put(fdf->img1, &temp, color);
+			temp.y++;
+		}
+	}
 }

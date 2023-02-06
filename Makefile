@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/02/06 17:07:53 by jebouche          #+#    #+#              #
+#    Updated: 2023/02/06 17:08:19 by jebouche         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = fdf
 
 LIB = libft/libft.a
@@ -7,39 +19,36 @@ SRCS = main.c draw_line.c mlx_close.c handle_press.c new_fdf.c get_map.c \
 
 OBJS = $(SRCS:.c=.o)
 
-DEPS = fdf.h
+DEPS = includes/fdf.h
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -I.
+CFLAGS = -Wall -Werror -Wextra -I. -Iincludes -Ilibft/includes
 
-# DEBUG = -g -fsanitize=address
+DEBUG_SANI = -g -fsanitize=address
+
 DEBUG = -g
-
-# MLX = -Imlx
-MLX = -Lminilibx-linux -lmlx -L/usr/X11/include/../lib -lXext -lX11 -lm
-X = /usr/X11/include/X11
 
 MLX_COMPILE = -lmlx -framework OpenGL -framework AppKit
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	@$(MAKE) -C libft
-	$(CC) $(CFLAGS) $(DEBUG) -o $(NAME) $(OBJS) $(MLX_COMPILE) $(LIB) 
-# $(CC) $(CFLAGS) $(DEBUG) -o $(NAME) $(OBJS) $(MLX) $(MLX_COMPILE) $(LIB) 
+$(NAME): $(OBJS) $(LIB)
+	$(CC) $(CFLAGS) $(OBJS) $(MLX_COMPILE) $(LIB) -o $(NAME)
 
 %.o : %.c $(DEPS)
-	@$(CC) $(CFLAGS) $(DEBUG) -c $< -o $@
-# @$(CC) $(CFLAGS) $(DEBUG) -Iminilibx-linux -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIB) : 
+	@$(MAKE) -C libft
 
 clean: 
-	$(MAKE) clean -C libft
-	rm -f $(OBJS)
+	@$(MAKE) clean -C libft
+	@rm -f $(OBJS)
 
 fclean: clean
-	$(MAKE) fclean -C libft
-	rm -f $(NAME)
+	@$(MAKE) fclean -C libft
+	@rm -f $(NAME)
 
 re: fclean all
 

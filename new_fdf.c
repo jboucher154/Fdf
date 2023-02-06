@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 14:32:43 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/01 17:48:47 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:02:43 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,41 +29,28 @@ void	get_new_image(t_fdf_data *fdf)
 	&fdf->img1->endian);
 }
 
-t_fdf_data	*new_fdf(void)
+void	new_fdf_setup(t_fdf_data *fdf)
 {
-	t_fdf_data	*new;
-
-	new = (t_fdf_data *) malloc(sizeof(t_fdf_data));
-	if (!new)
-	{
-		ft_putendl_fd("Fdf allocation failed", 2);
-		exit(1);
-	}
-	new->camera = NULL;
-	new->img1 = NULL;
-	new->map = NULL;
-	new->map_size[0] = 0;
-	new->map_size[1] = 0;
-	new->mlx = NULL;
-	new->win = NULL;
-	new->dirty = 0;
-	return (new);
+	fdf->camera = NULL;
+	fdf->img1 = NULL;
+	fdf->map = NULL;
+	fdf->map_size[0] = 0;
+	fdf->map_size[1] = 0;
+	fdf->mlx = NULL;
+	fdf->win = NULL;
+	fdf->dirty = 0;
 }
 
-t_fdf_data	*create_fdf(char *fname)
+void	create_fdf(t_fdf_data *fdf, char *fname)
 {
-	t_fdf_data	*new;
-
-	new = new_fdf();
-	new->mlx = mlx_init();
-	if (!new->mlx)
-		mlx_close(new, 2, "mlx allocation failed");
-	// new->win = mlx_new_window(new->mlx, WIN_WIDTH, WIN_HEIGHT, "FdF");
-	// if (!new->win)
-	// 	mlx_close(new, 2, "window allocation failed");
-	// get_new_image(new);
-	// new->map = get_map(fname, new);
-	// new_camera(new);
-	fname = 0;
-	return (new);
+	new_fdf_setup(fdf);
+	fdf->map = get_map(fname, fdf);
+	fdf->mlx = mlx_init();
+	if (!fdf->mlx)
+		mlx_close(fdf, 2, "Mlx allocation failed");
+	fdf->win = mlx_new_window(fdf->mlx, WIN_WIDTH, WIN_HEIGHT, "FdF");
+	if (!fdf->win)
+		mlx_close(fdf, 2, "Window allocation failed");
+	get_new_image(fdf);
+	new_camera(fdf);
 }
