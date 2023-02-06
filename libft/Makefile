@@ -6,7 +6,7 @@
 #    By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/25 15:56:42 by jebouche          #+#    #+#              #
-#    Updated: 2023/01/16 14:46:50 by jebouche         ###   ########.fr        #
+#    Updated: 2023/02/06 17:09:29 by jebouche         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,6 @@ SRCS =  ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 OBJS = $(SRCS:.c=.o)
 
 DEPS = ./includes/libft.h ./includes/ft_printf.h
-
-# DEPS_PATH = ./includes
 
 CC = cc
 

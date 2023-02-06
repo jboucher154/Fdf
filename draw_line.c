@@ -6,12 +6,12 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 10:29:53 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 15:10:12 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:30:37 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
+// #include "libft.h"
 
 void	bresneham_pos_steep(t_vector3 *first, t_vector3 *second, int color, \
 		t_fdf_data *fdf)

@@ -6,13 +6,12 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 16:54:03 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 14:58:48 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:30:15 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft.h"
-#include "ft_printf.h"
 
 int	main(int argc, char **argv)
 {

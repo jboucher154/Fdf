@@ -6,13 +6,12 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:39:47 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/01 15:38:36 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:30:25 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft.h"
-#include "ft_printf.h"
 
 void	translate_point(t_camera *camera, t_vector3 *cam_view)
 {

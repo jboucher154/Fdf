@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 10:05:20 by jebouche          #+#    #+#             */
-/*   Updated: 2023/01/16 14:41:31 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:33:19 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,6 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list	*ft_lstnew(void *content);
 int		ft_lstsize(t_list *lst);
 char	*get_next_line(int fd);
-char    *ft_gnl_join(char *s1, char *s2);
+char	*ft_gnl_join(char *s1, char *s2);
 
 #endif

@@ -6,12 +6,11 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 14:16:44 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/01 14:48:30 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:30:20 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "ft_printf.h"
 
 void	change_translate(int key_code, t_fdf_data *fdf)
 {
@@ -52,7 +51,6 @@ void	change_rotation(int key_code, t_fdf_data *fdf)
 
 int	handle_press(int key_code, t_fdf_data *fdf)
 {
-	ft_printf("key pressed: %i\n", key_code);
 	if (key_code == 53)
 		mlx_close(fdf, 0, "Normal exit");
 	if (key_code <= 126 && key_code >= 123)
