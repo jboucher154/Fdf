@@ -6,12 +6,13 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 14:35:44 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 16:30:22 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 17:21:59 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft.h"
+#include <fcntl.h>
 
 int	get_width(char **split_line)
 {

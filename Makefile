@@ -6,7 +6,7 @@
 #    By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 17:07:53 by jebouche          #+#    #+#              #
-#    Updated: 2023/02/06 17:08:19 by jebouche         ###   ########.fr        #
+#    Updated: 2023/02/06 17:25:45 by jebouche         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,16 @@ NAME = fdf
 
 LIB = libft/libft.a
 
-SRCS = main.c draw_line.c mlx_close.c handle_press.c new_fdf.c get_map.c \
-	 get_camera_view.c draw_camera_view.c new_camera.c line_utility.c
+SRCS = main.c \
+		draw_line.c \
+		mlx_close.c \
+		handle_press.c \
+		new_fdf.c \
+		get_map.c \
+		get_camera_view.c \
+		draw_camera_view.c \
+		new_camera.c \
+		line_utility.c
 
 OBJS = $(SRCS:.c=.o)
 

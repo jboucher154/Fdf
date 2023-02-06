@@ -6,12 +6,11 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 14:32:43 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 16:30:08 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 17:20:49 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
 
 void	get_new_image(t_fdf_data *fdf)
 {

@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:39:47 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 16:30:25 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 17:26:33 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_vector3	*get_camera_view(t_fdf_data *fdf, int i, int j)
 	cam_view->x = j;
 	cam_view->y = i;
 	cam_view->z = fdf->map[i][j];
-	if (cam_view->z > 1)
+	if (cam_view->z >= 1)
 		cam_view->color = 0x00F000;
 	else
 		cam_view->color = 0xFFFFFF;

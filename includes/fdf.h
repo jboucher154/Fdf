@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:39:49 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 15:35:23 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 17:22:21 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include <mlx.h>
 # include <math.h>
 # include <stdlib.h>
-# include <fcntl.h>
-# include <unistd.h>
 
 # ifndef WIN_HEIGHT
 #  define WIN_HEIGHT 1080

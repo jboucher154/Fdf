@@ -6,13 +6,12 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 14:48:33 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 16:30:13 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/06 17:20:06 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft.h"
-#include "ft_printf.h"
 
 int	initial_scale(t_fdf_data *fdf)
 {
