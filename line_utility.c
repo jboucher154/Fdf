@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 12:35:27 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/07 13:16:59 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/07 14:17:11 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,14 @@ int	set_line_color(t_vector3 *first, t_vector3 *second)
 {
 	if (first->color > 0xFFA500)
 		return (first->color);
+	else if (second->color > 0xFFA500)
+		return (second->color);
 	else if (first->color < 0xFFA500)
 		return (first->color);
-	else
+	else if (second->color < 0xFFA500)
 		return (second->color);
+	else
+		return (0xDA70D6);
 }
 
 void	draw_vertical(t_vector3 *first, t_vector3 *second, int color, \

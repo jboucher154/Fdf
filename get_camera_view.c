@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:39:47 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/07 13:06:07 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/07 14:22:10 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ void	scale_vector(t_camera *camera, t_vector3 *cam_view)
 {
 	cam_view->x = cam_view->x * camera->scale;
 	cam_view->y = cam_view->y * camera->scale;
-	if (cam_view->z >= 10)
-		cam_view->z = (cam_view->z / 5) * camera->scale;
-	else
 	cam_view->z = cam_view->z * camera->scale;
 }
 
