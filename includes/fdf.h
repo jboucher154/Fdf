@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:39:49 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 17:22:21 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/07 14:22:37 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ typedef struct s_camera
 	int					translate_y;
 }						t_camera;
 
-//for project
 void		draw_line(t_vector3 *f, t_vector3 *s, t_fdf_data *fdf);
 void		my_mlx_pixel_put(t_img_data *data, t_vector3 *start, int color);
 int			mlx_close(t_fdf_data *fdf, int exit_code, char *exit_msg);
