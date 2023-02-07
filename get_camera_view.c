@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:39:47 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 17:26:33 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/07 13:06:07 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,27 @@ void	rotate_cam_vector(t_camera *camera, t_vector3 *cam_view)
 	cam_view->z = z;
 }
 
+static int	set_color(int z)
+{
+	if (z >= 1)
+		return (0xFFFFFF);
+	else if (z < 0)
+		return (0xC71585);
+	else
+		return (0xDA70D6);
+}
+
 t_vector3	*get_camera_view(t_fdf_data *fdf, int i, int j)
 {
 	t_vector3	*cam_view;
 
 	cam_view = (t_vector3 *) ft_calloc(1, sizeof(t_vector3));
 	if (!cam_view)
-		mlx_close(fdf, 1, "camera vector allocation failed");
+		mlx_close(fdf, 1, "Error: Camera vector allocation failed");
 	cam_view->x = j;
 	cam_view->y = i;
 	cam_view->z = fdf->map[i][j];
-	if (cam_view->z >= 1)
-		cam_view->color = 0x00F000;
-	else
-		cam_view->color = 0xFFFFFF;
+	cam_view->color = set_color(cam_view->z);
 	scale_vector(fdf->camera, cam_view);
 	rotate_cam_vector(fdf->camera, cam_view);
 	translate_point(fdf->camera, cam_view);
