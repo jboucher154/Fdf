@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 14:48:33 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 17:20:06 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/07 13:07:02 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	new_camera(t_fdf_data *fdf)
 
 	camera = (t_camera *) ft_calloc(1, sizeof(t_camera));
 	if (!camera)
-		mlx_close(fdf, 2, "Camera allocation failed");
+		mlx_close(fdf, 2, "Error: Camera allocation failed");
 	fdf->camera = camera;
 	camera->rotation_x = 35;
 	camera->rotation_z = 45;
