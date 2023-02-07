@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 12:35:27 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/07 12:29:45 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/07 13:16:59 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	draw_vertical(t_vector3 *first, t_vector3 *second, int color, \
 {
 	t_vector3	temp;
 
-	if (first->y > second->y)
+	if (first->y >= second->y)
 	{
 		temp.x = second->x;
 		temp.y = second->y;
