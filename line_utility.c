@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 12:35:27 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 16:30:18 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/07 12:29:45 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ void	my_mlx_pixel_put(t_img_data *data, t_vector3 *pt, int color)
 
 int	set_line_color(t_vector3 *first, t_vector3 *second)
 {
-	if (first->color != 0xFFFFFF)
+	if (first->color > 0xFFA500)
+		return (first->color);
+	else if (first->color < 0xFFA500)
 		return (first->color);
 	else
 		return (second->color);

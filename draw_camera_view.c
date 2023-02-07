@@ -6,7 +6,7 @@
 /*   By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 12:23:04 by jebouche          #+#    #+#             */
-/*   Updated: 2023/02/06 16:31:16 by jebouche         ###   ########.fr       */
+/*   Updated: 2023/02/07 13:05:52 by jebouche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	redraw(t_fdf_data *fdf)
 	free(fdf->img1);
 	get_new_image(fdf);
 	if (!fdf->img1)
-		mlx_close(fdf, 1, "Image allocation failed");
+		mlx_close(fdf, 1, "Error: Image allocation failed");
 	fdf->img1->addr = mlx_get_data_addr(fdf->img1->img, \
 	&fdf->img1->bits_per_pixel, &fdf->img1->line_length, \
 	&fdf->img1->endian);
