@@ -6,7 +6,7 @@
 #    By: jebouche <jebouche@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/06 17:07:53 by jebouche          #+#    #+#              #
-#    Updated: 2023/02/06 17:25:45 by jebouche         ###   ########.fr        #
+#    Updated: 2023/02/07 14:34:11 by jebouche         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ DEPS = includes/fdf.h
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -I. -Iincludes -Ilibft/includes
+CFLAGS = -Wall -Werror -Wextra -Iincludes -Ilibft/includes
 
 DEBUG_SANI = -g -fsanitize=address
 
