@@ -14,8 +14,8 @@ Map is assumed to be correctly formatted.
 Some basic maps rendered
 
 <p align="center">
-  <img src="assets/pyloneMap.png" width="45%>
-  <img src="assets/juliaMap.png" width="45%>
+  <img src="assets/pyloneMap.png" width="45%">
+  <img src="assets/juliaMap.png" width="45%">
 </p>
 
 
