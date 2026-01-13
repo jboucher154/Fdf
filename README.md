@@ -11,10 +11,15 @@ Map is assumed to be correctly formatted.
 
 ## In Action
 
-A basic map in action
+Some basic maps rendered
 
-https://github.com/jboucher154/Fdf/blob/main/assets/42MapInAction.mov
+<p align="center">
+  <img src="assets/pyloneMap.png" width="45%>
+  <img src="assets/juliaMap.png" width="45%>
+</p>
 
-![Height map shaded](assets/pyloneMap.png)
-![Height map wireframe](assets/juliaMap.png)
+
+<p align="center">
+  https://github.com/jboucher154/Fdf/blob/main/assets/42MapInAction.mov
+</p>
 
