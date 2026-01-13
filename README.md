@@ -13,5 +13,8 @@ Map is assumed to be correctly formatted.
 
 A basic map in action
 
-[![A height map of the number 42 genrated as a wireframe](https://youtube.com/vi/O2ghiLcfsgA/0.jpg)] (https://youtu.be/O2ghiLcfsgA)
+https://github.com/jboucher154/Fdf/blob/main/assets/42MapInAction.mov
+
+![Height map shaded](assets/pyloneMap.png)
+![Height map wireframe](assets/juliaMap.png)
 
