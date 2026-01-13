@@ -19,7 +19,6 @@ Some basic maps rendered
 </p>
 
 
-<p align="center">
-  https://github.com/user-attachments/assets/d51b80da-76d2-44e2-8cb6-a7f1d1bc6235
-</p>
+https://github.com/user-attachments/assets/d51b80da-76d2-44e2-8cb6-a7f1d1bc6235
+
 
